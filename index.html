@@ -34,15 +34,17 @@ select,input{font:inherit;color:inherit}select{width:100%;border:0;outline:0;bac
 .single-info{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
 .hidden{display:none!important}
 .notice{font-size:12px;color:var(--muted);margin-top:8px}
-body.theme-snoopy{--bg:#f2f8fb;--primary:#3564a5}body.theme-snoopy .logo{background:#e9c23a}
-body.theme-jao{--bg:#f2ecfb;--primary:#7746b7}body.theme-jao .logo{background:#9a69ce}
-body.theme-bts{--bg:#f6eff9;--primary:#8153b7}body.theme-bts .logo{background:#a57bd5}
-body.theme-marvel{--bg:#faeeee;--primary:#b71e31}body.theme-marvel .logo{background:#d02a40}
-body.theme-butterfly{--bg:#fbf1fb;--primary:#9b62ba}body.theme-butterfly .logo{background:#b77bd1}
-body.theme-ocean{--bg:#edf8fa;--primary:#158da8}body.theme-ocean .logo{background:#41b7c8}
-body.theme-pink{--bg:#fff1f6;--primary:#d85f94}body.theme-pink .logo{background:#f092b8}
-body.theme-dark{--bg:#17181e;--card:#23252e;--text:#f2f3f7;--muted:#aaadbb;--line:#353844;--primary:#8974ea}
-body.theme-dark .soft,body.theme-dark .legend div{background:#30323d}body.theme-dark .field input,body.theme-dark .field select{background:#23252e;color:#fff;border-color:#424551}body.theme-dark .account{background:#23252e}
+body.theme-rosa{--bg:#fff0f6;--card:#fff;--text:#4a2635;--muted:#8b6b78;--line:#f0d8e2;--primary:#d85f94}
+body.theme-rosa .logo{background:#f092b8}
+
+body.theme-lilas{--bg:#f6f0ff;--card:#fff;--text:#39284d;--muted:#786a87;--line:#e3d7f3;--primary:#9164c5}
+body.theme-lilas .logo{background:#b99bdd}
+
+body.theme-preto{--bg:#0d0d0f;--card:#18181c;--text:#f5f5f7;--muted:#b4b4bd;--line:#303038;--primary:#ffffff}
+body.theme-preto .soft,body.theme-preto .legend div{background:#25252b}
+body.theme-preto .field input,body.theme-preto .field select{background:#18181c;color:#fff;border-color:#3a3a43}
+body.theme-preto .account{background:#18181c}
+body.theme-preto .btn{background:#fff;color:#111}
 @media(max-width:760px){
 .app{padding:12px}.content{grid-template-columns:1fr}.summary-grid,.status-grid{grid-template-columns:1fr}.split-grid{grid-template-columns:1fr}.installments{grid-template-columns:1fr}.salary-grid{grid-template-columns:1fr}.single-info{grid-template-columns:1fr}
 header{margin-bottom:12px}h1{font-size:22px}.salary-total{font-size:31px}.panel{padding:14px}.chart-box{height:225px}.donut{width:165px;height:165px}.donut:after{inset:44px}
@@ -55,7 +57,7 @@ header{margin-bottom:12px}h1{font-size:22px}.salary-total{font-size:31px}.panel{
 <header><div class="logo">💰</div><div><h1>Minhas Finanças</h1><div class="sub">Controle financeiro mensal</div></div></header>
 
 <div class="control"><label>Mês</label><select id="month"><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option selected>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
-<div class="control"><label>Tema</label><select id="theme"><option value="">Padrão</option><option value="theme-snoopy">Snoopy</option><option value="theme-jao">Jão</option><option value="theme-bts">BTS</option><option value="theme-marvel">Marvel</option><option value="theme-butterfly">Borboletas</option><option value="theme-ocean">Oceano</option><option value="theme-pink">Pink</option><option value="theme-dark">Escuro</option></select></div>
+<div class="control"><label>Tema</label><select id="theme"><option value="">Padrão</option><option value="theme-rosa">Rosa</option><option value="theme-lilas">Lilás</option><option value="theme-preto">Preto</option></select></div>
 
 <section class="card salary">
 <div class="label">Salário total recebido</div><div class="salary-total" id="salaryTotal">R$ 0,00</div>
