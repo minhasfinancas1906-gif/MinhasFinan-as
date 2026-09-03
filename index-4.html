@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Minhas Finanças</title>
+<style>
+:root{--primary:#6c55d9;--bg:#f6f6fb;--card:#fff;--text:#222437;--muted:#7b7f90;--line:#e9e9f0;--danger:#e25555;--success:#18a56e;--warning:#d39b20}
+*{box-sizing:border-box}html,body{margin:0;padding:0;width:100%;overflow-x:hidden}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);padding-bottom:30px}
+.app{width:min(1050px,100%);margin:auto;padding:16px}
+header{display:flex;align-items:center;gap:12px;margin:4px 0 16px}
+.logo{width:46px;height:46px;border-radius:14px;background:#f1b72e;display:grid;place-items:center;font-size:23px;flex:none}
+h1{font-size:25px;margin:0}.sub{color:var(--muted);font-size:14px;margin-top:3px}
+.card,.control{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 3px 14px #00000008}
+.control{padding:12px 16px;margin-bottom:12px}.control label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+select,input{font:inherit;color:inherit}select{width:100%;border:0;outline:0;background:transparent;font-weight:700}
+.salary{padding:20px;margin-bottom:14px}.label{color:var(--muted);font-size:16px}.salary-total{font-size:36px;font-weight:900;color:var(--primary);margin:5px 0 12px}
+.money-input{width:100%;padding:13px 14px;border:2px solid var(--line);border-radius:13px;outline:0;background:var(--card)}.money-input:focus{border-color:var(--primary)}
+.salary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:11px}.soft{background:#f7f7fa;border-radius:12px;padding:11px}.soft label{display:block;color:var(--muted);font-size:11px;margin-bottom:6px}.soft strong{font-size:16px}
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.installments{display:grid;gap:14px;margin-bottom:14px}.installment-block{display:grid;gap:10px}.installment-accounts{padding:16px}.split{padding:17px}.split h3{color:var(--primary);font-size:17px;margin:0 0 10px}.split .money-input{margin-bottom:9px}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.summary{padding:18px}.summary span{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}.summary strong{font-size:24px}.red strong{color:var(--danger)}.green strong{color:var(--success)}.purple strong{color:var(--primary)}.yellow strong{color:var(--warning)}
+.content{display:grid;grid-template-columns:1.55fr 1fr;gap:14px}.panel{padding:18px}.panel-title{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:13px}.panel-title h2{font-size:20px;margin:0}
+.btn{border:0;background:var(--primary);color:white;font-weight:800;border-radius:11px;padding:10px 14px;cursor:pointer}.btn.secondary{background:#eeeef4;color:#454857}
+.account-list{display:grid;gap:10px}.account{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.account-top{display:grid;grid-template-columns:1.3fr .8fr auto;gap:8px;align-items:center}
+.field{min-width:0}.field label{display:block;color:var(--muted);font-size:10px;margin-bottom:4px}.field input,.field select{width:100%;border:1px solid #dddde6;border-radius:9px;padding:9px;outline:0;background:#fff;font-size:14px}
+.account-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}.delete{width:36px;height:36px;border:0;border-radius:50%;background:#f0f1f5;color:#666;font-size:19px;cursor:pointer}
+.empty{color:var(--muted);text-align:center;padding:18px}.section{margin-bottom:22px}.section:last-child{margin-bottom:0}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.section-head h3{margin:0;color:var(--primary);font-size:15px}
+.chart-box{height:260px;display:grid;place-items:center}.donut{width:190px;height:190px;border-radius:50%;background:conic-gradient(var(--danger) 0deg 0deg,var(--success) 0deg 0deg,var(--primary) 0deg 360deg);position:relative}.donut:after{content:"";position:absolute;inset:50px;background:var(--card);border-radius:50%}
+.legend{display:grid;gap:8px}.legend div{display:flex;justify-content:space-between;align-items:center;background:#f7f7fa;border-radius:9px;padding:9px 10px;font-size:13px}.dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:7px}.d-red{background:var(--danger)}.d-green{background:var(--success)}.d-purple{background:var(--primary)}
+.final{margin-top:14px;padding:23px;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:22px}.final small{color:var(--muted)}.final strong{display:block;color:var(--primary);font-size:36px;margin-top:6px}.final.negative strong{color:var(--danger)}
+.single-info{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.hidden{display:none!important}
+.notice{font-size:12px;color:var(--muted);margin-top:8px}
+body.theme-rosa{--bg:#fff0f6;--card:#fff;--text:#4a2635;--muted:#8b6b78;--line:#f0d8e2;--primary:#d85f94}
+body.theme-rosa .logo{background:#f092b8}
+
+body.theme-lilas{--bg:#f6f0ff;--card:#fff;--text:#39284d;--muted:#786a87;--line:#e3d7f3;--primary:#9164c5}
+body.theme-lilas .logo{background:#b99bdd}
+
+body.theme-preto{--bg:#0d0d0f;--card:#18181c;--text:#f5f5f7;--muted:#b4b4bd;--line:#303038;--primary:#ffffff}
+body.theme-preto .soft,body.theme-preto .legend div{background:#25252b}
+body.theme-preto .field input,body.theme-preto .field select{background:#18181c;color:#fff;border-color:#3a3a43}
+body.theme-preto .account{background:#18181c}
+body.theme-preto .btn{background:#fff;color:#111}
+@media(max-width:760px){
+.app{padding:12px}.content{grid-template-columns:1fr}.summary-grid,.status-grid{grid-template-columns:1fr}.split-grid{grid-template-columns:1fr}.installments{grid-template-columns:1fr}.salary-grid{grid-template-columns:1fr}.single-info{grid-template-columns:1fr}
+header{margin-bottom:12px}h1{font-size:22px}.salary-total{font-size:31px}.panel{padding:14px}.chart-box{height:225px}.donut{width:165px;height:165px}.donut:after{inset:44px}
+.account-top{grid-template-columns:1fr 1fr auto}.account-bottom{grid-template-columns:1fr 1fr}.account-bottom .field:last-child{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo">💰</div><div><h1>Minhas Finanças</h1><div class="sub">Controle financeiro mensal</div></div></header>
+
+<div class="control"><label>Mês</label><select id="month"><option>Janeiro</option><option>Fevereiro</option><option>Março</option><option>Abril</option><option>Maio</option><option>Junho</option><option>Julho</option><option>Agosto</option><option selected>Setembro</option><option>Outubro</option><option>Novembro</option><option>Dezembro</option></select></div>
+<div class="control"><label>Tema</label><select id="theme"><option value="">Padrão</option><option value="theme-rosa">Rosa</option><option value="theme-lilas">Lilás</option><option value="theme-preto">Preto</option></select></div>
+
+<section class="card salary">
+<div class="label">Salário total recebido</div><div class="salary-total" id="salaryTotal">R$ 0,00</div>
+<input class="money-input" id="salary" type="number" min="0" step="0.01" placeholder="Digite seu salário total">
+<div class="salary-grid">
+<div class="soft"><label>Recebimento do salário</label><select id="mode"><option value="1">Salário em 1 parcela</option><option value="2">Salário em 2 parcelas</option></select></div>
+<div class="soft"><label>Valor por parcela (automático)</label><strong id="perPart">R$ 0,00</strong></div>
+</div>
+<div class="notice">Se receber em 2 parcelas, informe abaixo quanto realmente recebeu em cada uma.</div>
+</section>
+
+<div id="splitValues" class="installments hidden">
+<section class="installment-block">
+  <div class="card split">
+    <h3>1ª parcela</h3>
+    <label class="label">Valor recebido na 1ª parcela</label>
+    <input class="money-input" id="p1" type="number" min="0" step="0.01" placeholder="Digite o valor da 1ª parcela">
+    <div class="soft" style="margin-top:9px">Total das contas da 1ª parcela: <strong id="u1">R$ 0,00</strong></div>
+    <div class="soft" style="margin-top:7px">Sobra da 1ª parcela: <strong id="l1">R$ 0,00</strong></div>
+  </div>
+  <section class="card installment-accounts">
+    <div class="section-head"><h3>Contas que vou pagar com a 1ª parcela</h3><button class="btn" onclick="addAccount('1')">+ Conta</button></div>
+    <div id="list1" class="account-list"></div>
+  </section>
+</section>
+
+<section class="installment-block">
+  <div class="card split">
+    <h3>2ª parcela</h3>
+    <label class="label">Valor recebido na 2ª parcela</label>
+    <input class="money-input" id="p2" type="number" min="0" step="0.01" placeholder="Digite o valor da 2ª parcela">
+    <div class="soft" style="margin-top:9px">Total das contas da 2ª parcela: <strong id="u2">R$ 0,00</strong></div>
+    <div class="soft" style="margin-top:7px">Sobra da 2ª parcela: <strong id="l2">R$ 0,00</strong></div>
+  </div>
+  <section class="card installment-accounts">
+    <div class="section-head"><h3>Contas que vou pagar com a 2ª parcela</h3><button class="btn" onclick="addAccount('2')">+ Conta</button></div>
+    <div id="list2" class="account-list"></div>
+  </section>
+</section>
+</div>
+
+<div id="singleValues" class="single-info">
+<div class="card summary purple"><span>Salário disponível</span><strong id="sv">R$ 0,00</strong></div>
+<div class="card summary red"><span>Contas do mês</span><strong id="su">R$ 0,00</strong></div>
+<div class="card summary purple"><span>Sobra</span><strong id="sl">R$ 0,00</strong></div>
+</div>
+
+<div class="summary-grid">
+<div class="card summary red"><span>Total a pagar</span><strong id="pay">R$ 0,00</strong></div>
+<div class="card summary green"><span>Total a receber</span><strong id="receive">R$ 0,00</strong></div>
+<div class="card summary purple"><span>Vai sobrar</span><strong id="remain">R$ 0,00</strong></div>
+</div>
+<div class="status-grid">
+<div class="card summary green"><span>✓ Já pagou</span><strong id="paid">R$ 0,00</strong></div>
+<div class="card summary red"><span>⏳ Ainda não pagou</span><strong id="pending">R$ 0,00</strong></div>
+<div class="card summary yellow"><span>💰 A receber pendente</span><strong id="pendingReceive">R$ 0,00</strong></div>
+</div>
+
+<div class="content">
+<section class="card panel">
+<div id="onePanel">
+<div class="panel-title"><h2>Contas do mês</h2><button class="btn" onclick="addAccount('1')">+ Adicionar</button></div>
+<div id="oneList" class="account-list"></div>
+</div>
+
+<div id="twoPanel" class="hidden"></div>
+</section>
+
+<section class="card panel">
+<div class="panel-title"><h2>Resumo</h2></div>
+<div class="chart-box"><div id="donut" class="donut"></div></div>
+<div class="legend">
+<div><span><i class="dot d-red"></i>A pagar</span><strong id="lp">R$ 0,00</strong></div>
+<div><span><i class="dot d-green"></i>A receber</span><strong id="lr">R$ 0,00</strong></div>
+<div><span><i class="dot d-purple"></i>Vai sobrar</span><strong id="ll">R$ 0,00</strong></div>
+</div>
+</section>
+</div>
+
+<div id="final" class="final"><small>💵 TOTAL QUE SOBROU NO MÊS</small><strong id="finalValue">R$ 0,00</strong></div>
+</div>
+
+<script>
+/*
+  MINHAS FINANÇAS
+  Cada mês tem seu próprio registro.
+  Assim, Agosto não é apagado quando você muda para Setembro.
+*/
+
+const KEY = "minhasFinancas_meses_v5";
+
+const initial = [
+  {name:"Nubank", value:359.23, installments:1, type:"pagar", status:"pendente", part:"2"},
+  {name:"Avenida", value:201.16, installments:1, type:"pagar", status:"pendente", part:"1"},
+  {name:"Santander", value:19.98, installments:1, type:"pagar", status:"pendente", part:"2"},
+  {name:"Mãe paga", value:145.83, installments:1, type:"receber", status:"pendente", part:"1"},
+  {name:"Mãe Premium", value:162.31, installments:1, type:"pagar", status:"pendente", part:"2"}
+];
+
+function newMonth(name){
+  return {
+    salary:0,
+    mode:"1",
+    p1:0,
+    p2:0,
+    month:name,
+    theme:"",
+    accounts:[]
+  };
+}
+
+/*
+  Migração:
+  Se a pessoa já usava a versão antiga (minhasFinancas_v3),
+  os dados antigos são preservados e colocados no mês que estava
+  selecionado. Isso evita perder as contas que já estavam cadastradas.
+*/
+let db = null;
+
+try {
+  db = JSON.parse(localStorage.getItem(KEY) || "null");
+} catch(e) {
+  db = null;
+}
+
+if(!db || !db.months){
+  db = {months:{}};
+
+  let old = null;
+  try {
+    old = JSON.parse(localStorage.getItem("minhasFinancas_v3") || "null");
+  } catch(e) {
+    old = null;
+  }
+
+  if(old && old.month){
+    db.months[old.month] = {
+      ...newMonth(old.month),
+      ...old,
+      accounts:Array.isArray(old.accounts) ? old.accounts : []
+    };
+  } else {
+    db.months["Setembro"] = {
+      ...newMonth("Setembro"),
+      accounts:initial.map(a => ({...a}))
+    };
+  }
+
+  localStorage.setItem(KEY, JSON.stringify(db));
+}
+
+let currentMonth =
+  localStorage.getItem("minhasFinancas_current_month") || "Setembro";
+
+if(!db.months[currentMonth]){
+  db.months[currentMonth] = newMonth(currentMonth);
+}
+
+let state = db.months[currentMonth];
+
+const $ = id => document.getElementById(id);
+
+const money = v =>
+  Number(v || 0).toLocaleString("pt-BR", {
+    style:"currency",
+    currency:"BRL"
+  });
+
+const esc = s =>
+  String(s).replace(/[&<>"']/g, m => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[m]));
+
+function save(){
+  db.months[state.month] = state;
+  localStorage.setItem(KEY, JSON.stringify(db));
+  localStorage.setItem("minhasFinancas_current_month", state.month);
+}
+
+function card(a,i,split){
+  return `
+  <div class="account">
+    <div class="account-top">
+      <div class="field">
+        <label>Conta</label>
+        <input value="${esc(a.name)}"
+          oninput="chg(${i},'name',this.value)">
+      </div>
+
+      <div class="field">
+        <label>Valor</label>
+        <input type="number" min="0" step="0.01"
+          value="${a.value}"
+          oninput="chg(${i},'value',this.value)">
+      </div>
+
+      <button class="delete" onclick="del(${i})">×</button>
+    </div>
+
+    <div class="account-bottom">
+      <div class="field">
+        <label>Parcelas</label>
+        <input type="number" min="1" step="1"
+          value="${a.installments}"
+          oninput="chg(${i},'installments',this.value)">
+      </div>
+
+      <div class="field">
+        <label>Tipo</label>
+        <select onchange="chg(${i},'type',this.value)">
+          <option value="pagar" ${a.type==="pagar"?"selected":""}>A pagar</option>
+          <option value="receber" ${a.type==="receber"?"selected":""}>A receber</option>
+        </select>
+      </div>
+
+      ${
+        split ? `
+        <div class="field">
+          <label>Salário</label>
+          <select onchange="move(${i},this.value)">
+            <option value="1" ${a.part==="1"?"selected":""}>1ª parcela</option>
+            <option value="2" ${a.part==="2"?"selected":""}>2ª parcela</option>
+          </select>
+        </div>` : ""
+      }
+
+      <div class="field">
+        <label>Pagamento</label>
+        <select onchange="chg(${i},'status',this.value)">
+          <option value="pendente" ${a.status!=="pago"?"selected":""}>
+            Ainda não pagou
+          </option>
+          <option value="pago" ${a.status==="pago"?"selected":""}>
+            ✓ Já pagou
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>`;
+}
+
+function render(){
+  $("salary").value = state.salary || "";
+  $("salaryTotal").textContent = money(state.salary);
+  $("mode").value = state.mode;
+  $("p1").value = state.p1 || "";
+  $("p2").value = state.p2 || "";
+
+  $("month").value = state.month;
+  $("theme").value = state.theme || "";
+  document.body.className = state.theme || "";
+
+  const two = state.mode === "2";
+
+  $("splitValues").classList.toggle("hidden", !two);
+  $("singleValues").classList.toggle("hidden", two);
+  $("onePanel").classList.toggle("hidden", two);
+  $("twoPanel").classList.toggle("hidden", !two);
+
+  if(two){
+    const first = state.accounts
+      .map((a,i)=>({a,i}))
+      .filter(x=>x.a.part==="1");
+
+    const second = state.accounts
+      .map((a,i)=>({a,i}))
+      .filter(x=>x.a.part==="2");
+
+    $("list1").innerHTML = first.map(x =>
+      card(x.a,x.i,true)
+    ).join("") ||
+      '<div class="empty">Nenhuma conta nesta parcela.</div>';
+
+    $("list2").innerHTML = second.map(x =>
+      card(x.a,x.i,true)
+    ).join("") ||
+      '<div class="empty">Nenhuma conta nesta parcela.</div>';
+  } else {
+    $("oneList").innerHTML = state.accounts.map((a,i)=>
+      card(a,i,false)
+    ).join("") ||
+      '<div class="empty">Nenhuma conta cadastrada.</div>';
+  }
+
+  calc();
+}
+
+function calc(){
+  let pay=0, receive=0, paid=0, pending=0, pendingReceive=0;
+  let u1=0, u2=0, us=0;
+
+  state.accounts.forEach(a=>{
+    const v = +a.value || 0;
+
+    if(a.type==="receber"){
+      receive += v;
+      if(a.status!=="pago") pendingReceive += v;
+    } else {
+      pay += v;
+
+      if(a.status==="pago") paid += v;
+      else pending += v;
+
+      if(a.part==="1") u1 += v;
+      else if(a.part==="2") u2 += v;
+      else us += v;
+    }
+  });
+
+  let remaining;
+
+  if(state.mode==="2"){
+    const p1 = +state.p1 || 0;
+    const p2 = +state.p2 || 0;
+
+    remaining = p1-u1 + p2-u2;
+
+    $("u1").textContent = money(u1);
+    $("u2").textContent = money(u2);
+    $("l1").textContent = money(p1-u1);
+    $("l2").textContent = money(p2-u2);
+  } else {
+    remaining = (+state.salary || 0) - us;
+
+    $("sv").textContent = money(state.salary);
+    $("su").textContent = money(us);
+    $("sl").textContent = money(remaining);
+  }
+
+  $("perPart").textContent =
+    money((+state.salary||0) / (state.mode==="2" ? 2 : 1));
+
+  $("salaryTotal").textContent = money(state.salary);
+  $("pay").textContent = money(pay);
+  $("receive").textContent = money(receive);
+  $("remain").textContent = money(remaining);
+
+  $("paid").textContent = money(paid);
+  $("pending").textContent = money(pending);
+  $("pendingReceive").textContent = money(pendingReceive);
+
+  $("lp").textContent = money(pay);
+  $("lr").textContent = money(receive);
+  $("ll").textContent = money(Math.max(remaining,0));
+
+  $("finalValue").textContent = money(remaining);
+  $("final").classList.toggle("negative", remaining<0);
+
+  const total = pay + receive + Math.max(remaining,0);
+  const a = total ? pay/total*360 : 0;
+  const b = total ? receive/total*360 : 0;
+
+  $("donut").style.background =
+    `conic-gradient(
+      var(--danger) 0deg ${a}deg,
+      var(--success) ${a}deg ${a+b}deg,
+      var(--primary) ${a+b}deg 360deg
+    )`;
+}
+
+function chg(i,k,v){
+  if(k==="value") v=+v||0;
+
+  if(k==="installments")
+    v=Math.max(1,+v||1);
+
+  state.accounts[i][k]=v;
+  save();
+  calc();
+}
+
+function move(i,v){
+  state.accounts[i].part=v;
+  save();
+  render();
+}
+
+function addAccount(part){
+  state.accounts.push({
+    name:"Nova conta",
+    value:0,
+    installments:1,
+    type:"pagar",
+    status:"pendente",
+    part:part
+  });
+
+  save();
+  render();
+}
+
+function del(i){
+  if(confirm("Excluir esta conta?")){
+    state.accounts.splice(i,1);
+    save();
+    render();
+  }
+}
+
+$("salary").oninput=e=>{
+  state.salary=+e.target.value||0;
+  save();
+  calc();
+};
+
+$("mode").onchange=e=>{
+  state.mode=e.target.value;
+
+  /*
+    Ao passar para 2 parcelas, as contas existentes que não
+    tinham parcela definida continuam aparecendo na conta da
+    1ª parcela, evitando que desapareçam.
+  */
+  if(state.mode==="2"){
+    state.accounts.forEach(a=>{
+      if(a.part!=="1" && a.part!=="2") a.part="1";
+    });
+  }
+
+  save();
+  render();
+};
+
+$("p1").oninput=e=>{
+  state.p1=+e.target.value||0;
+  save();
+  calc();
+};
+
+$("p2").oninput=e=>{
+  state.p2=+e.target.value||0;
+  save();
+  calc();
+};
+
+/*
+  AQUI ESTÁ A FUNÇÃO PRINCIPAL DO HISTÓRICO:
+
+  - Salva Agosto antes de trocar.
+  - Se Setembro ainda não existir, cria Setembro vazio.
+  - Troca para o mês escolhido.
+  - Ao voltar para Agosto, recupera exatamente os dados de Agosto.
+*/
+$("month").onchange=e=>{
+  save();
+
+  const selected=e.target.value;
+
+  if(!db.months[selected]){
+    db.months[selected]=newMonth(selected);
+  }
+
+  state=db.months[selected];
+
+  localStorage.setItem(
+    "minhasFinancas_current_month",
+    selected
+  );
+
+  save();
+  render();
+};
+
+$("theme").onchange=e=>{
+  state.theme=e.target.value;
+  save();
+  document.body.className=state.theme || "";
+};
+
+render();
+</script>
+</body>
+</html>
